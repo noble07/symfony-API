@@ -51,9 +51,20 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("users")
+     * @Route("user/{uuid}", name="get_one_user", methods={"GET"})
      */
-    public function showAlgo(){
-        return 'Hola';
+    public function get($uuid): JsonResponse
+    {
+        $user = $this->userRepository->findOneBy(['id' => $uuid]);
+
+        $data = [
+            'uuid' => $user->getUuid(),
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+            'nickname' => $user->getNickname(),
+            'birthdate' => $user->getBirthdate()
+        ];
+
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 }
